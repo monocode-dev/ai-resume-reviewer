@@ -15,7 +15,7 @@ export interface users {
     password: string;
     signup_ip: string;
     plan: string;
-    reviews_used_today: number;
+    used_today: number;
     usage_reset_date: Date;
     created_at: Date;
 }
