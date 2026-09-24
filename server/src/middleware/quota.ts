@@ -1,16 +1,6 @@
-import { Request, Response, NextFunction } from "express";
 import pool from "../database/database";
-import rateLimit from "express-rate-limit";
+import { Request, Response, NextFunction } from "express";
 
-//authorization
-export function requireAuth(req: Request, res: Response, next: NextFunction) {
-    if(!req.session?.userId){
-        return res.status(401).json({success: false, message: 'Unauthorized, please Signup/Login!'});
-    }
-    next();
-}
-
-//Daily quota
 export async function checkQuota(req: Request, res: Response, next: NextFunction) {
   try {
     const result = await pool.query(
@@ -32,13 +22,7 @@ export async function checkQuota(req: Request, res: Response, next: NextFunction
 
     next();
   } catch (error) {
+    console.error(error)
     return res.status(500).json({ success: false, message: "Server Error, please try again later..." });
   }
 }
-
-//Rate limiter
-export const loginLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 5, 
-  message: 'Too many login attempts, please try again after a minute.',
-});

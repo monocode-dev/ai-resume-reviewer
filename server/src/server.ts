@@ -6,6 +6,7 @@ import pool from "./database/database";
 
 //Routers
 import authRouter from './routes/authRouter'
+import reviewRouter from "./routes/reviewRouter"
 
 dotenv.config();
 const app = express();
@@ -32,6 +33,7 @@ app.use(
 );
 
 app.use("/auth", authRouter)
+app.use("/api", reviewRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
