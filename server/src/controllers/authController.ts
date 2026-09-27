@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt'
 import pool from "../database/database";
+import buildMeResponse from "../utils/utils"
 
 export async function signup(req: Request, res: Response) {
     const {email, password} = req.body;
@@ -32,7 +33,7 @@ export async function signup(req: Request, res: Response) {
 
         req.session.userId = addUser.rows[0].id;
         req.session.plan = addUser.rows[0].plan;
-        return res.status(201).json({success: true, message: 'Account Created!', data: {email: email, plan: req.session.plan}});
+        return res.status(201).json({success: true, message: 'Account Created!', data: buildMeResponse(addUser.rows[0])});
     } catch (error) {
         return res.status(500).json({success: false, message: 'Server Error, please try again later...'});
     };
@@ -55,7 +56,7 @@ export async function login(req: Request, res: Response) {
 
         req.session.userId = FindUserByEmail.rows[0].id;
         req.session.plan = FindUserByEmail.rows[0].plan;
-        return res.status(200).json({success: true, message: 'Logged In Successfully', data: {email: email, plan: req.session.plan}});
+        return res.status(200).json({success: true, message: 'Logged In Successfully', data: buildMeResponse(FindUserByEmail.rows[0])});
 
     } catch (error) {
         return res.status(500).json({success: false, message: 'Server Error, please try again later...'});
@@ -86,15 +87,11 @@ export async function getMe(req: Request, res: Response) {
     }
 
     const user = result.rows[0];
-    const limit = user.plan === "pro" ? 5 : 1;
-    const isNewDay = new Date(user.usage_reset_date).toDateString() !== new Date().toDateString();
-    const reviewsRemainingToday = isNewDay ? limit : Math.max(0, limit - user.reviews_used_today);
-
     req.session.plan = user.plan;
 
     return res.status(200).json({
       success: true,
-      data: { email: user.email, plan: user.plan, reviewsRemainingToday },
+      data: buildMeResponse(user),
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: "Server Error, please try again later..." });
