@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { reviewResumeFile } from "../scripts/gemini";
+import { reviewResumeFile, ResumeReview } from "../scripts/gemini";
 import pool from "../database/database";
 
 export async function reviewResume(req: Request, res: Response) {
@@ -12,7 +12,7 @@ export async function reviewResume(req: Request, res: Response) {
     }
 
     try {
-        const review = await reviewResumeFile(fileBuffer, mimeType, jobDescription);
+        const review: ResumeReview | undefined = await reviewResumeFile(fileBuffer, mimeType, jobDescription);
         if(!review) return res.status(500).json({success: false, message: "Server Error, Please try again later..."})
 
         if (req.session.plan === "free") {

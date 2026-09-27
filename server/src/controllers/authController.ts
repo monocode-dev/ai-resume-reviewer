@@ -72,3 +72,31 @@ export async function logout(req: Request, res: Response) {
         return res.status(200).json({success: true, message: 'logged out Successfully'});
     })
 }
+
+export async function getMe(req: Request, res: Response) {
+  try {
+    const result = await pool.query(
+      `SELECT email, plan, reviews_used_today, usage_reset_date FROM users WHERE id = $1`,
+      [req.session.userId]
+    );
+
+    if (!result.rows[0]) {
+      req.session.destroy(() => {});
+      return res.status(401).json({ success: false, message: "Session invalid." });
+    }
+
+    const user = result.rows[0];
+    const limit = user.plan === "pro" ? 5 : 1;
+    const isNewDay = new Date(user.usage_reset_date).toDateString() !== new Date().toDateString();
+    const reviewsRemainingToday = isNewDay ? limit : Math.max(0, limit - user.reviews_used_today);
+
+    req.session.plan = user.plan;
+
+    return res.status(200).json({
+      success: true,
+      data: { email: user.email, plan: user.plan, reviewsRemainingToday },
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Server Error, please try again later..." });
+  }
+}
