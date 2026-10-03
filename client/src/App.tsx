@@ -12,10 +12,10 @@ export default function App() {
 
   useEffect(() => {
     apiRequest<Me>('/auth/me')
-    .then(res => {
-      if(res && res.success) setUser(res.data);
-      setLoading(false);
-    });
+      .then(res => {
+        if (res && res.success) setUser(res.data);
+        setLoading(false);
+      });
   }, []);
 
   function handleReviewComplete(remaining: number) {
@@ -23,18 +23,24 @@ export default function App() {
   }
 
   function handleLogout() {
-  apiRequest('/auth/logout', { method: 'POST' }).then(() => {
-    setUser(null);
-  });
-}
+    apiRequest('/auth/logout', { method: 'POST' }).then(() => {
+      setUser(null);
+    });
+  }
 
-  if(loading) return <p>Loading...</p>
+  if (loading) {
+    return (
+      <div className="page">
+        <span className="spinner" style={{ width: 20, height: 20, borderTopColor: 'var(--ink)', borderColor: 'rgba(27,36,48,0.2)' }} />
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={user ? <Navigate to="/"/> : <LoginPage onLogin={setUser} />}/>
-        <Route path="/signup" element={user ? <Navigate to="/"/> : <SignupPage onLogin={setUser} /> }/>
+        <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage onLogin={setUser} />} />
+        <Route path="/signup" element={user ? <Navigate to="/" /> : <SignupPage onLogin={setUser} />} />
         <Route path="/" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete} onLogout={handleLogout} /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
