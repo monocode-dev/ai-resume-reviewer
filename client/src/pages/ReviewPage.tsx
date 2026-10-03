@@ -2,11 +2,12 @@ import { useState } from "react";
 import type { Me, ResumeReview } from "../types/types";
 
 interface ReviewPageProps {
-  user: Me;
+  userInfo: Me;
   onReviewComplete: (remaining: number) => void;
+  onLogout: () => void;
 }
 
-export default function ReviewPage({user}: ReviewPageProps) {
+export default function ReviewPage({userInfo, onReviewComplete, onLogout}: ReviewPageProps) {
   const [file, setFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState('');
   const [review, setReview] = useState<ResumeReview | null>(null);
@@ -45,6 +46,7 @@ export default function ReviewPage({user}: ReviewPageProps) {
           return;
         }
         setReview(res.data);
+        onReviewComplete(res.data.reviewsRemainingToday);
       })
       .catch(() => {
         setLoading(false);
@@ -55,6 +57,7 @@ export default function ReviewPage({user}: ReviewPageProps) {
   if (review) {
     return (
       <div>
+        <button onClick={onLogout}>Log Out</button>
         <h2>Match Score: {review.matchScore}/100</h2>
         <p>{review.summary}</p>
 
@@ -64,7 +67,7 @@ export default function ReviewPage({user}: ReviewPageProps) {
         <h3>Missing Keywords</h3>
         <ul>{review.missingKeywords.map((k) => <li key={k}>{k}</li>)}</ul>
 
-        {user.plan === 'pro' ? (
+        {userInfo.plan === 'pro' ? (
           <>
             <h3>Suggestions</h3>
             <ul>{review.suggestions.map((s) => <li key={s}>{s}</li>)}</ul>
@@ -81,7 +84,8 @@ export default function ReviewPage({user}: ReviewPageProps) {
   return (
     <div>
       <h1>Resume Reviewer</h1>
-      <p>Reviews remaining today: {user.reviewsRemainingToday}</p>
+      <button onClick={onLogout}>Log Out</button>
+      <p>Reviews remaining today: {userInfo.reviewsRemainingToday}</p>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="resume">Resume (PDF or image)</label>
@@ -98,7 +102,7 @@ export default function ReviewPage({user}: ReviewPageProps) {
 
         {error && <p className="form-error">{error}</p>}
 
-        <button type="submit" disabled={loading || user.reviewsRemainingToday <= 0}>
+        <button type="submit" disabled={loading || userInfo.reviewsRemainingToday <= 0}>
           {loading ? 'Reviewing...' : 'Review My Resume'}
         </button>
       </form>

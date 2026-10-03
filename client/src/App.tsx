@@ -18,6 +18,16 @@ export default function App() {
     });
   }, []);
 
+  function handleReviewComplete(remaining: number) {
+    setUser((prev) => prev ? { ...prev, reviewsRemainingToday: remaining } : prev);
+  }
+
+  function handleLogout() {
+  apiRequest('/auth/logout', { method: 'POST' }).then(() => {
+    setUser(null);
+  });
+}
+
   if(loading) return <p>Loading...</p>
 
   return (
@@ -25,7 +35,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/"/> : <LoginPage onLogin={setUser} />}/>
         <Route path="/signup" element={user ? <Navigate to="/"/> : <SignupPage onLogin={setUser} /> }/>
-        <Route path="/" element={user ? <ReviewPage userInfo={user} /> : <Navigate to="/login" />} />
+        <Route path="/" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete} onLogout={handleLogout} /> : <Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   )
