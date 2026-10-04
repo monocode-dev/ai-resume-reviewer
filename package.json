@@ -2,8 +2,8 @@
   "dependencies": {
     "node": "^22.23.3"
   },
-  "scripts": {
-    "build": "npm --prefix client install && npm --prefix client run build && tsc",
-    "start": "node server/dist/server.js"
-  }
+"scripts": {
+  "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install && npm --prefix server run build",
+  "start": "node server/dist/server.js"
+}
 }
