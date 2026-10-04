@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { reviewResumeFile, ResumeReview } from "../scripts/gemini";
-import pool from "../database/database";
+import pool from "../database/database.js";
 
 export async function reviewResume(req: Request, res: Response) {
     const fileBuffer = req.file?.buffer;

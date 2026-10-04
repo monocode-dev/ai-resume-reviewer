@@ -1,4 +1,4 @@
-import pool from "../database/database";
+import pool from "../database/database.js";
 import { Request, Response, NextFunction } from "express";
 
 export async function checkQuota(req: Request, res: Response, next: NextFunction) {

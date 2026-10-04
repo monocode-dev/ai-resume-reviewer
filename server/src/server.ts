@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import dotenv from "dotenv"
-import pool from "./database/database";
+import pool from "./database/database.js";
 
 //Routers
 import authRouter from './routes/authRouter'

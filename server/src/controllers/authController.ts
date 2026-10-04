@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt'
-import pool from "../database/database";
+import pool from "../database/database.js";
 import buildMeResponse from "../utils/utils"
 
 export async function signup(req: Request, res: Response) {

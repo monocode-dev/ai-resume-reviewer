@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import pool from "../database/database";
 import rateLimit from "express-rate-limit";
 
 //authorization
