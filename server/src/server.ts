@@ -4,6 +4,9 @@ import connectPgSimple from "connect-pg-simple";
 import dotenv from "dotenv"
 import pool from "./database/database.js";
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 //Routers
 import authRouter from './routes/authRouter.js'
 import reviewRouter from "./routes/reviewRouter.js"
@@ -12,6 +15,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const PgSession = connectPgSimple(session);
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+app.use(express.static(path.join(__dirname, '../../client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+});
 
 app.set('trust proxy', 1);
 app.use(express.json());
