@@ -11,8 +11,3 @@ export interface Me{
   plan: "free" | 'pro';
   reviewsRemainingToday: number;
 }
-
-interface ReviewResponse {
-  review: ResumeReview;
-  reviewsRemainingToday: number;
-}
