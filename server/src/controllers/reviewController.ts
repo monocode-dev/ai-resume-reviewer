@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { reviewResumeFile, ResumeReview } from "../scripts/gemini";
+import { reviewResumeFile, ResumeReview } from "../scripts/gemini.js";
 import pool from "../database/database.js";
 
 export async function reviewResume(req: Request, res: Response) {

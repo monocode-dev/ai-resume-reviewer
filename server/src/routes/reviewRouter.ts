@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { reviewResume } from "../controllers/reviewController";
-import { requireAuth} from "../middleware/middleware";
-import { checkQuota } from "../middleware/quota";
-import { validateResumeFile, validateJobDescription, handleMulterError, upload } from "../middleware/upload";
+import { reviewResume } from "../controllers/reviewController.js";
+import { requireAuth} from "../middleware/middleware.js";
+import { checkQuota } from "../middleware/quota.js";
+import { validateResumeFile, validateJobDescription, handleMulterError, upload } from "../middleware/upload.js";
 
 const router = Router();
 

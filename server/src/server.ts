@@ -5,8 +5,8 @@ import dotenv from "dotenv"
 import pool from "./database/database.js";
 
 //Routers
-import authRouter from './routes/authRouter'
-import reviewRouter from "./routes/reviewRouter"
+import authRouter from './routes/authRouter.js'
+import reviewRouter from "./routes/reviewRouter.js"
 
 dotenv.config();
 const app = express();
