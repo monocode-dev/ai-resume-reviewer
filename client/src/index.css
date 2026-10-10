@@ -448,6 +448,7 @@ a { color: var(--accent); }
   .review-top { flex-direction: column; align-items: flex-start; }
 }
 
+/* navbar */
 .navbar {
   position: sticky;
   top: 0;
@@ -507,6 +508,7 @@ a { color: var(--accent); }
   .navbar-auth .btn { padding: 0.45rem 0.75rem; font-size: 0.85rem; }
 }
 
+/* home */
 .home {
   max-width: 1040px;
   margin: 0 auto;
@@ -573,12 +575,14 @@ a { color: var(--accent); }
 }
 
 .home-section h2 {
+  text-decoration: underline;
   font-family: var(--font-serif);
   font-weight: 500;
   font-size: 1.6rem;
   margin-bottom: 2rem;
 }
 
+/*how it works*/
 .home-section-howItWorks{
   display: flex;
   flex-direction: column;
@@ -634,17 +638,28 @@ a { color: var(--accent); }
   max-width: 46ch;
 }
 
+/*what you get*/
+.home-section-whatYouGet{
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .annotated-resume {
   display: grid;
   grid-template-columns: minmax(220px, 300px) 1fr;
   gap: 3rem;
   align-items: start;
+
 }
 
 .mock-resume {
   background: var(--panel);
   border: 1px solid var(--rule);
   padding: 1.75rem 1.5rem;
+    position: relative;
+  top: 50px;
 }
 
 .mock-line {
@@ -714,6 +729,19 @@ a { color: var(--accent); }
   justify-content: center;
   margin: 1rem 0 3rem;
 }
+
+.home-plans-teaser h3 {
+  margin: 5px;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+}
+
+.home-cta-btn {
+  margin: 5px;
+  padding: 3px 5px;
+  font-family: var(--font-mono);
+}
+
 
 .home-footer {
   display: flex;

@@ -75,6 +75,7 @@ export default function HomePage({ user }: HomePageProps) {
       </section>
  
       <section className="home-section">
+        <div className="home-section-whatYouGet">
         <h2>What you get</h2>
         <div className="annotated-resume">
           <div className="mock-resume" aria-hidden="true">
@@ -127,11 +128,12 @@ export default function HomePage({ user }: HomePageProps) {
             </li>
           </ul>
         </div>
+      </div>
       </section>
 
       <section className="home-section home-plans-teaser panel">
         <div>
-          <h2>Start free, upgrade when you need it</h2>
+          <h3>Start free, upgrade when you need it</h3>
         </div>
         <Link to="/plans" className="btn btn-primary home-cta-btn">Compare Plans</Link>
       </section>
