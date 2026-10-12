@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom"
 import { apiRequest } from "./api/client"
 import Navbar from "./components/Navbar"
 import HomePage from "./pages/HomePage"
@@ -10,14 +10,10 @@ import LoginPage from "./pages/LoginPage"
 import ReviewPage from "./pages/ReviewPage"
 import type { Me } from "./types/types"
 
-// ReviewPage has its own header (with its own Logout button), so the
-// global Navbar is hidden there to avoid showing two logout controls.
 function Layout({ user, onLogout, children }: { user: Me | null; onLogout: () => void; children: React.ReactNode }) {
-  const location = useLocation();
-  const hideNavbar = location.pathname === "/product";
   return (
     <>
-      {!hideNavbar && <Navbar user={user} onLogout={onLogout} />}
+      {<Navbar user={user} onLogout={onLogout} />}
       {children}
     </>
   );
@@ -62,7 +58,7 @@ export default function App() {
           <Route path="/plans" element={<PlanPage />} />
           <Route path="/login" element={user ? <Navigate to="/product" /> : <LoginPage onLogin={setUser} />} />
           <Route path="/signup" element={user ? <Navigate to="/plans" /> : <SignupPage onLogin={setUser} />} />
-          <Route path="/product" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete} onLogout={handleLogout} /> : <Navigate to="/signup" />} />
+          <Route path="/product" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete}/> : <Navigate to="/signup" />} />
         </Routes>
       </Layout>
     </BrowserRouter>

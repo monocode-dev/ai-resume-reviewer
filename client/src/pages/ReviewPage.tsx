@@ -4,7 +4,6 @@ import type { Me, ResumeReview } from "../types/types";
 interface ReviewPageProps {
   userInfo: Me;
   onReviewComplete: (remaining: number) => void;
-  onLogout: () => void;
 }
 
 function formatFileSize(bytes: number) {
@@ -19,7 +18,7 @@ function scoreTone(score: number) {
   return "";
 }
 
-export default function ReviewPage({ userInfo, onReviewComplete, onLogout }: ReviewPageProps) {
+export default function ReviewPage({ userInfo, onReviewComplete}: ReviewPageProps) {
   const [file, setFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [jobDescription, setJobDescription] = useState('');
@@ -86,11 +85,6 @@ export default function ReviewPage({ userInfo, onReviewComplete, onLogout }: Rev
     const tone = scoreTone(review.matchScore);
     return (
       <div className="page review-page">
-        <div className="review-top">
-          <p className="mark" style={{ margin: 0 }}><span>Resume</span> Reviewer</p>
-          <button onClick={onLogout} className="btn btn-line">Log out</button>
-        </div>
-
         <div className="panel result-doc">
           <div>
             <div className="score-block">
@@ -156,11 +150,6 @@ export default function ReviewPage({ userInfo, onReviewComplete, onLogout }: Rev
 
   return (
     <div className="page review-page">
-      <div className="review-top">
-        <p className="mark" style={{ margin: 0 }}><span>Resume</span> Reviewer</p>
-        <button onClick={onLogout} className="btn btn-line">Log out</button>
-      </div>
-
       <div className="status-line" style={{ marginBottom: '1.25rem' }}>
         <span>{userInfo.reviewsRemainingToday} review{userInfo.reviewsRemainingToday === 1 ? '' : 's'} left today</span>
         <span className={`plan-tag ${userInfo.plan === 'pro' ? 'pro' : ''}`}>{planLabel}</span>
