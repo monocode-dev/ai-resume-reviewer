@@ -4,39 +4,42 @@ import pool from "../database/database.js";
 import buildMeResponse from "../utils/utils.js"
 
 export async function signup(req: Request, res: Response) {
-    const {email, password} = req.body;
-    const ip = req.ip || req.headers['x-forwarded-for']
+    const { email, password } = req.body;
+    const ip = req.ip || req.socket.remoteAddress;
 
-    if(!email || !password) return res.status(400).json({success: false, message: 'Invalid Credentials!'});
+    if (!email || !password) {
+        return res.status(400).json({ success: false, message: 'Invalid Credentials!' });
+    }
 
     try {
         const lookForEmail = await pool.query(
-            `SELECT 1 FROM users WHERE email = $1`,
+            `SELECT 1 FROM users WHERE email = $1`, 
             [email]
         );
+        
+        if (lookForEmail.rows[0]) {
+            return res.status(400).json({ success: false, message: 'Invalid Credentials!' });
+        }
 
-        if(lookForEmail.rows[0]) return res.status(400).json({success: false, message: 'Invalid Credentials!'});
-
-        const lookForIp = await pool.query(
-            `SELECT * FROM users WHERE signup_ip = $1`,
-            [ip]
-        );
-
-        if(lookForIp.rows.length >= 2) return res.status(400).json({success: false, message: 'Too many Accounts!'});
-
-        const hashedPassword = await bcrypt.hash(password, 10)
-
+        const hashedPassword = await bcrypt.hash(password, 10);
         const addUser = await pool.query(
-            `INSERT INTO users (email, password, signup_ip) VALUES ($1, $2, $3) RETURNING *`,
+            `INSERT INTO users (email, password, signup_ip) VALUES ($1, $2, $3) RETURNING *`, 
             [email, hashedPassword, ip]
         );
 
         req.session.userId = addUser.rows[0].id;
         req.session.plan = addUser.rows[0].plan;
-        return res.status(201).json({success: true, message: 'Account Created!', data: buildMeResponse(addUser.rows[0])});
+
+        return res.status(201).json({
+            success: true, 
+            message: 'Account Created!', 
+            data: buildMeResponse(addUser.rows[0])
+        });
+
     } catch (error) {
-        return res.status(500).json({success: false, message: 'Server Error, please try again later...'});
-    };
+        console.error("Signup Error:", error);
+        return res.status(500).json({ success: false, message: 'Server Error, please try again later...' });
+    }
 }
 
 export async function login(req: Request, res: Response) {

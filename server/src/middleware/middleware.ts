@@ -9,9 +9,21 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
-//Rate limiter
+//login/signup Rate limiter
 export const loginLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 5, 
   message: 'Too many login attempts, please try again after a minute.',
+});
+
+//account creation Limiter
+export const signupRateLimiter = rateLimit({
+    windowMs: 1000 * 60 * 60 * 24,
+    max: 2,
+    message: {
+        success: false,
+        message: "Too many accounts created from this IP. Please try again in a day."
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
 });
