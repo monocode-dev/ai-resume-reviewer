@@ -62,7 +62,7 @@ export default function App() {
           <Route path="/plans" element={<PlanPage />} />
           <Route path="/login" element={user ? <Navigate to="/product" /> : <LoginPage onLogin={setUser} />} />
           <Route path="/signup" element={user ? <Navigate to="/plans" /> : <SignupPage onLogin={setUser} />} />
-          <Route path="/product" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/product" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete} onLogout={handleLogout} /> : <Navigate to="/signup" />} />
         </Routes>
       </Layout>
     </BrowserRouter>
