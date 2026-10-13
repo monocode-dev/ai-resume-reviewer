@@ -30,6 +30,6 @@ server/   Express + TypeScript backend (REST API, auth, quota, Gemini integratio
 
 ## Roadmap
 
-- [ ] Public landing page with navbar.
-- [ ] Product page with plan selection and payment for tiers.
-- [ ] Move authentication out of the landing flow.
+- [x] Public landing page with navbar.
+- [x] Product page with plan selection and payment for tiers.
+- [x] Move authentication out of the landing flow.
