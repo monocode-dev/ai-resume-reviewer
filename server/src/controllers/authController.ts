@@ -100,3 +100,21 @@ export async function getMe(req: Request, res: Response) {
     return res.status(500).json({ success: false, message: "Server Error, please try again later..." });
   }
 }
+
+export async function setPlan(req: Request, res: Response) {
+    try{
+        const result = await pool.query(
+            `UPDATE users SET plan = $1 WHERE id = $2`,
+            [req.body.plan, req.session.userId]
+        );
+
+        if(result.rowCount === 0){
+            return res.status(401).json({ success: false, message: "Failed to set uder plan" });
+        }
+
+        req.session.plan = req.body.plan;
+        return res.status(200).json({ success: true, message: "Plan updated" });
+    }catch(err){
+        return res.status(500).json({ success: false, message: "Server Error, please try again later..." });
+  }
+}
