@@ -8,7 +8,7 @@ async function dbMigrate() {
                 email TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
                 signup_ip TEXT,
-                plan TEXT NOT NULL DEFAULT 'free',
+                plan TEXT,
                 used_today INTEGER NOT NULL DEFAULT 0,
                 usage_reset_date DATE NOT NULL DEFAULT CURRENT_DATE,
                 created_at TIMESTAMPTZ NOT NULL DEFAULT now()
