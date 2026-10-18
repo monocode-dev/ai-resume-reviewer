@@ -3,12 +3,38 @@ import { useNavigate } from "react-router-dom";
 import { apiRequest } from "../api/client";
 import PlanCard from "../components/PlanCard";
 
-export default function PlanPage() {
+interface PlanPageProps {
+  onPlanChange: (plan: "free" | "pro") => void;
+}
+
+export default function PlanPage({ onPlanChange }: PlanPageProps) {
   const navigate = useNavigate();
+  const [freeLoading, setFreeLoading] = useState(false);
+  const [freeError, setFreeError] = useState("");
   const [proLoading, setProLoading] = useState(false);
   const [proError, setProError] = useState("");
 
-  function handleFreeSelect() {
+  async function handleFreeSelect() {
+    setFreeError("");
+    setFreeLoading(true);
+
+    const res = await apiRequest("/auth/plan", {
+      method: "PUT",
+      body: JSON.stringify({ plan: "free" }),
+    });
+
+    if (res === null) {
+      navigate("/signup");
+      return;
+    }
+
+    if (!res.success) {
+      setFreeError("Couldn't set your plan — try again.");
+      setFreeLoading(false);
+      return;
+    }
+
+    onPlanChange("free");
     navigate("/product");
   }
 
@@ -51,6 +77,8 @@ export default function PlanPage() {
           ]}
           ctaLabel="Start Free"
           onSelect={handleFreeSelect}
+          loading={freeLoading}
+          error={freeError}
         />
 
         <PlanCard

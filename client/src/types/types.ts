@@ -8,6 +8,6 @@ export interface ResumeReview {
 
 export interface Me{
   email: string;
-  plan: "free" | 'pro';
+  plan: "free" | 'pro' | null;
   reviewsRemainingToday: number;
 }

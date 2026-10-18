@@ -35,6 +35,10 @@ export default function App() {
     setUser((prev) => prev ? { ...prev, reviewsRemainingToday: remaining } : prev);
   }
 
+  function handlePlanChange(plan: "free" | "pro") {
+    setUser((prev) => prev ? { ...prev, plan } : prev);
+  }
+
   function handleLogout() {
     apiRequest('/auth/logout', { method: 'POST' }).then(() => {
       setUser(null);
@@ -55,10 +59,17 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage user={user} />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/plans" element={<PlanPage />} />
+          <Route path="/plans" element={<PlanPage onPlanChange={handlePlanChange} />} />
           <Route path="/login" element={user ? <Navigate to="/product" /> : <LoginPage onLogin={setUser} />} />
           <Route path="/signup" element={user ? <Navigate to="/plans" /> : <SignupPage onLogin={setUser} />} />
-          <Route path="/product" element={user ? <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete}/> : <Navigate to="/signup" />} />
+          <Route
+            path="/product"
+            element={
+              !user ? <Navigate to="/signup" />
+              : !user.plan ? <Navigate to="/plans" />
+              : <ReviewPage userInfo={user} onReviewComplete={handleReviewComplete} />
+            }
+          />
         </Routes>
       </Layout>
     </BrowserRouter>
