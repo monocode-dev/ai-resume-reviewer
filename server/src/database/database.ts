@@ -14,7 +14,7 @@ export interface users {
     email: string;
     password: string;
     signup_ip: string;
-    plan: string | undefined;
+    plan: string | null;
     used_today: number;
     usage_reset_date: Date;
     created_at: Date;
