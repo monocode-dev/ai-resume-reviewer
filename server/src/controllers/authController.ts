@@ -109,11 +109,11 @@ export async function setPlan(req: Request, res: Response) {
         );
 
         if(result.rowCount === 0){
-            return res.status(401).json({ success: false, message: "Failed to set uder plan" });
+            return res.status(401).json({ success: false, message: "Failed to set user plan" });
         }
 
         req.session.plan = req.body.plan;
-        return res.status(200).json({ success: true, message: "Plan updated" });
+        return res.status(200).json({ success: true, message: "plan has been updated" });
     }catch(err){
         return res.status(500).json({ success: false, message: "Server Error, please try again later..." });
   }
