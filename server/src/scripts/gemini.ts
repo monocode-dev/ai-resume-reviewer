@@ -446,23 +446,23 @@ matchScore:
 summary:
 
 * String
-* Maximum 80 words
+* Maximum 120 words
 
 missingSections:
 
 * Array of concise strings
-* Only genuinely useful missing sections
+* Genuinely useful missing sections
 
 missingKeywords:
 
-* Array of meaningful missing job-specific keywords/skills
-* Only include keywords that are important to the target role
+* Array of meaningful missing job-specific keywords/skills/has-to-add
+* Include keywords that are important to the target role
 
 suggestions:
 
 * Array of specific, actionable improvements
 * Prioritize the highest-impact improvements first
-* Do not fabricate information
+* Include everything job/resume related
 
 Keep all array items concise and avoid repeating the same recommendation.
 
