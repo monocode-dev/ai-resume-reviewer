@@ -10,6 +10,9 @@ import { fileURLToPath } from 'url';
 //Routers
 import authRouter from './routes/authRouter.js'
 import reviewRouter from "./routes/reviewRouter.js"
+import checkoutRouter from "./routes/checkoutRouter.js"
+
+import { stripeWebhook } from "./controllers/checkoutController.js"
 
 dotenv.config();
 const app = express();
@@ -18,6 +21,11 @@ const PgSession = connectPgSimple(session);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.set('trust proxy', 1);
+
+app.post("/api/checkout/webhook", 
+          express.raw({ type: "application/json" }), 
+          stripeWebhook);
+
 app.use(express.json());
 app.use(
   session({
@@ -40,6 +48,7 @@ app.use(express.static(path.join(__dirname, '../../client/dist')));
 
 app.use("/auth", authRouter)
 app.use("/api", reviewRouter)
+app.use("/api", checkoutRouter)
 
 app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, '../../client/dist/index.html'));

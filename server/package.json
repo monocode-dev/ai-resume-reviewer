@@ -20,7 +20,8 @@
     "express-session": "^1.19.0",
     "multer": "^2.4.0",
     "node": "^26.9.0",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "stripe": "^23.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
