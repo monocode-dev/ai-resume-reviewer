@@ -1,18 +1,46 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams  } from "react-router-dom";
 import { apiRequest } from "../api/client";
 import PlanCard from "../components/PlanCard";
+import type { Me } from "../types/types";
 
 interface PlanPageProps {
   onPlanChange: (plan: "free" | "pro") => void;
 }
 
+const CONFIRM_POLL_ATTEMPTS = 6;
+const CONFIRM_POLL_INTERVAL_MS = 1500;
+
 export default function PlanPage({ onPlanChange }: PlanPageProps) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [freeLoading, setFreeLoading] = useState(false);
   const [freeError, setFreeError] = useState("");
   const [proLoading, setProLoading] = useState(false);
   const [proError, setProError] = useState("");
+  const confirming = useRef(false);
+
+  useEffect(() => {
+    const checkout = searchParams.get("checkout");
+    if (checkout !== "success" || confirming.current) return;
+    confirming.current = true;
+ 
+    setProLoading(true);
+ 
+    (async () => {
+      for (let attempt = 0; attempt < CONFIRM_POLL_ATTEMPTS; attempt++) {
+        const res = await apiRequest<Me>("/auth/me");
+        if (res?.success && res.data?.plan === "pro") {
+          onPlanChange("pro");
+          navigate("/product");
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, CONFIRM_POLL_INTERVAL_MS));
+      }
+      setProLoading(false);
+      setProError("Payment received — still confirming with the server. Refresh in a moment if this doesn't update.");
+    })();
+  }, [searchParams, navigate, onPlanChange]);
 
   async function handleFreeSelect() {
     setFreeError("");
@@ -42,11 +70,14 @@ export default function PlanPage({ onPlanChange }: PlanPageProps) {
     setProError("");
     setProLoading(true);
 
-    // TODO: /api/checkout/create-session
     const res = await apiRequest<{ url: string }>("/api/checkout/create-session", {
       method: "POST",
-      body: JSON.stringify({ plan: "pro" }),
     });
+
+    if (res === null) {
+      navigate("/signup");
+      return;
+    }
 
     if (res?.success && res.data?.url) {
       window.location.href = res.data.url;
