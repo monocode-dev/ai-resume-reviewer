@@ -34,3 +34,6 @@ server/   Express + TypeScript backend (REST API, auth, quota, Gemini integratio
 - [x] Product page with plan selection and payment for tiers.
 - [x] Move authentication out of the landing flow.
 - [] Test and Debug the whole application flow.
+  - [] Review counter disappearing after reviews.
+  - [] Payment reset after choosing different plan.
+  - [] Easier checkout flow.
